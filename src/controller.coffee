@@ -2484,10 +2484,14 @@ Editor::formatDropdown = (socket = @getCursor(), view = @view) ->
 
 Editor::getDropdownList = (socket) ->
   result = socket.dropdown
+  siblingSocketText = []
+  socket.parent.traverseOneLevel (s) =>
+    if s.textContent
+      siblingSocketText.push(s.textContent())
   if result.generate
-    result = result.generate
+    result = result.generate(siblingSocketText)
   if 'function' is typeof result
-    result = socket.dropdown()
+    result = socket.dropdown(siblingSocketText)
   else
     result = socket.dropdown
   if result.options
